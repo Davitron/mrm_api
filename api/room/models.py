@@ -18,7 +18,7 @@ class Room(Base, Utility):
     equipment = relationship('Equipment')
 
     def __init__(self, **kwargs):
-        # validating empty fields on saving
+        # validating empty fields
         validate_empty_fields(**kwargs)
         
         self.name = kwargs['name']
