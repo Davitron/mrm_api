@@ -18,12 +18,8 @@ def validate_country_field(**kwargs):
     saving an object
     :params kwargs
     """
-    my_args = []
     countries = ['Kenya', 'Uganda', 'Nigeria']
-    for value in kwargs:
-        country_args = kwargs.get(value)
-        my_args.append(country_args)
-    if my_args[2] not in countries:
+    if kwargs['country'] not in countries:
         raise AttributeError("Not a valid country")
 
 
