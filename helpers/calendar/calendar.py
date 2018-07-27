@@ -1,15 +1,15 @@
-from api.room.models import Room
+from api.room.models import Room as RoomModel
 
 
-def check_calendar_id(info, calender_id):
+def check_calendar_id(self, info, calender_id):
     """ Check calendar id. This method is responsible
     for checking if a calendar exists
     :params
     - calendar_id
     - info
     """
-    query = Room.get_query(info)
+    query = RoomModel.get_query(info)  # noqa: F821
     result = query.filter(
-        Room.calendar_id == calendar_id  # noqa: F821
+        RoomModel.calendar_id == calendar_id  # noqa: F821
     ).first()
     return result
