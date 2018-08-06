@@ -4,8 +4,6 @@ from graphene_sqlalchemy import (SQLAlchemyObjectType)
 from graphql import GraphQLError
 from api.user.models import User as UserModel
 from helpers.auth.user_details import get_user_id_from_db
-from api.user_role.models import UsersRole
-from api.role.models import Role
 from helpers.auth.authentication import Auth
 
 
@@ -52,15 +50,11 @@ class DeleteUser(graphene.Mutation):
         query_user = User.get_query(info)
         exact_query_user = query_user.filter(
             UserModel.id == user_id).first()
-        user_role = UsersRole.query.filter_by(user_id=user_id).first()
         user_id_from_db = get_user_id_from_db()
         if not exact_query_user:
             raise GraphQLError("User not found")
         if user_id_from_db == user_id:
             raise GraphQLError("You cannot delete yourself")
-        role_name = Role.query.filter_by(id=user_role.role_id).first().role
-        if role_name == "Admin":
-            raise GraphQLError("You are not authorized to delete an Admin")
         exact_query_user.delete()
         return DeleteUser(user=exact_query_user)
 
