@@ -23,6 +23,19 @@ class Calendar(graphene.ObjectType):
     occupants = graphene.String()
 
 
+class RoomFilter(graphene.ObjectType):
+    rooms = graphene.List(Room)
+    
+    def resolve_rooms(self, info, capacity):
+        query = Room.get_query(info)
+        if capacity:
+            print(capacity)
+            return query.filter(RoomModel.capacity.filter_by(capacity)).all()
+        # if kwargs.pop("resources", None):
+        #     return Room.query.filter(RoomModel.resources.filter_by(kwargs['resources'])).all()
+
+
+
 class CreateRoom(graphene.Mutation):
     class Arguments:
         name = graphene.String(required=True)
@@ -105,6 +118,10 @@ class Query(graphene.ObjectType):
         calendar_id=graphene.String(),
         days=graphene.Int(),
     )
+    room_filter = graphene.List(
+        Room,
+        capacity=graphene.Int()
+        )
 
     def resolve_all_rooms(self, info):
         query = Room.get_query(info)
